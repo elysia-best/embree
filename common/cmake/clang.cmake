@@ -21,6 +21,8 @@ IF (EMBREE_ARM)
     SET(FLAGS_AVX "-D__AVX__ -D__SSE4_2__  -D__SSE4_1__  -D__BMI__ -D__BMI2__ -D__LZCNT__")
     SET(FLAGS_AVX2 "-D__AVX2__ -D__AVX__ -D__SSE4_2__  -D__SSE4_1__  -D__BMI__ -D__BMI2__ -D__LZCNT__")
   ENDIF ()
+ELSEIF (EMBREE_LOONGARCH64)
+  SET(FLAGS_SSE2 "-D__SSE__ -D__SSE2__")
 ELSE ()
   # for `thread` keyword
   _SET_IF_EMPTY(FLAGS_SSE2  "-msse -msse2 -mno-sse4.2")
@@ -93,6 +95,9 @@ ELSE()
   IF (NOT APPLE)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIE")                     # enables support for more secure position independent execution
   ENDIF()
+  IF (EMBREE_LOONGARCH64)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msimd=lsx")                # enable LoongArch SIMD instructions SX
+  ENDIF ()
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")                       # generate position independent code suitable for shared libraries
   SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -fPIC")                       # generate position independent code suitable for shared libraries
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")                  # enables C++11 features    

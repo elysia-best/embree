@@ -78,6 +78,7 @@ namespace embree
     case CPU::XEON_PHI_KNIGHTS_MILL   : frequency_level = FREQUENCY_SIMD512; break;
     case CPU::XEON_PHI_KNIGHTS_LANDING: frequency_level = FREQUENCY_SIMD512; break;
     case CPU::ARM:             frequency_level = FREQUENCY_SIMD256; break;
+    case CPU::LoongArch:       frequency_level = FREQUENCY_SIMD128; break;
     }
 
     /* initialize global state */
@@ -115,7 +116,7 @@ namespace embree
       //exceptions &= ~_MM_MASK_OVERFLOW;
       //exceptions &= ~_MM_MASK_UNDERFLOW;
       //exceptions &= ~_MM_MASK_INEXACT;
-      _MM_SET_EXCEPTION_MASK(exceptions);
+      // _MM_SET_EXCEPTION_MASK(exceptions);
     }
     
     /* print info header */

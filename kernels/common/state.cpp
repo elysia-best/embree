@@ -3,6 +3,7 @@
 
 #include "state.h"
 #include "../../common/lexers/streamfilters.h"
+#include <sys/sysinfo.h>
 
 namespace embree
 {
@@ -160,6 +161,8 @@ namespace embree
     bool hasNEON = (getCPUFeatures() & enabled_cpu_features) & CPU_FEATURE_NEON;
 
     return hasSSE2 || hasNEON;
+#elif defined(__loongarch_lp64)
+    return (getCPUFeatures() & enabled_cpu_features) & CPU_FEATURE_LSX;
 #else
     return (getCPUFeatures() & enabled_cpu_features) == enabled_cpu_features;
 #endif
