@@ -5,10 +5,9 @@ name: integrate
 
 permissions: read-all
 
-# same as nightly...
 on:
   schedule:
-    - cron:  '00 00 * * *'
+    - cron:  '01 00 * * *'
   workflow_dispatch:
 
 jobs:
@@ -195,7 +194,6 @@ jobs:
       artifact-out: integrate-linux-GCC
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-gcc -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -208,7 +206,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-linux-GCC
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-gcc -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-gcc
         cmake --build build --config Release --target test_integration
 
@@ -221,7 +218,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-linux-GCC
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-gcc -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-clang
         cmake --build build --config Release --target test_integration
 
@@ -232,10 +228,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-linux-GCC
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-gcc -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-icx
         cmake --build build --config Release --target test_integration
 
@@ -245,11 +240,10 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-out: integrate-linux-ICX
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-icx -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -262,7 +256,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-linux-ICX
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-gcc -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-gcc
         cmake --build build --config Release --target test_integration
 
@@ -273,10 +266,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-linux-ICX
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-icx -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-clang
         cmake --build build --config Release --target test_integration
 
@@ -287,10 +279,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-linux-ICX
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-icx -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-icx
         cmake --build build --config Release --target test_integration
         
@@ -307,7 +298,6 @@ jobs:
       artifact-out: integrate-static-linux-CLANG
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-clang -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -320,7 +310,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-static-linux-CLANG
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-clang -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-gcc
         cmake --build build --config Release --target test_integration
 
@@ -333,7 +322,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-static-linux-CLANG
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-clang -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-clang
         cmake --build build --config Release --target test_integration
 
@@ -344,15 +332,12 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-static-linux-CLANG
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-clang -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-icx
         cmake --build build --config Release --target test_integration
         
-
-
 
 
 ####################################################################
@@ -367,7 +352,6 @@ jobs:
       artifact-out: integrate-static-linux-GCC
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-gcc -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -380,7 +364,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-static-linux-GCC
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-gcc -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-gcc
         cmake --build build --config Release --target test_integration
 
@@ -393,7 +376,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-static-linux-GCC
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-gcc -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-clang
         cmake --build build --config Release --target test_integration
 
@@ -404,10 +386,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-static-linux-GCC
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-gcc -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-icx
         cmake --build build --config Release --target test_integration
 
@@ -418,11 +399,10 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-out: integrate-static-linux-ICX
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-icx -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -433,10 +413,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-static-linux-ICX
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-icx -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-gcc
         cmake --build build --config Release --target test_integration
 
@@ -447,10 +426,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-static-linux-ICX
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-icx -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-clang
         cmake --build build --config Release --target test_integration
 
@@ -461,10 +439,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-static-linux-ICX
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-static-linux-icx -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-icx
         cmake --build build --config Release --target test_integration
         
@@ -477,7 +454,6 @@ jobs:
       artifact-out: integrate-linux-CLANG
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-clang -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -490,7 +466,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-linux-CLANG
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-clang -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-gcc
         cmake --build build --config Release --target test_integration
 
@@ -503,7 +478,6 @@ jobs:
       runs-on: '[ "Linux", "docker", "avx512" ]'
       artifact-in: integrate-linux-CLANG
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-clang -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-clang
         cmake --build build --config Release --target test_integration
 
@@ -514,10 +488,9 @@ jobs:
     with:
       image: embree/rockylinux:8.7
       runs-on: '[ "Linux", "docker", "avx512" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-linux-CLANG
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-linux-clang -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-icx
         cmake --build build --config Release --target test_integration
 
@@ -534,11 +507,10 @@ jobs:
     with:
       image: embree/ubuntu:24.04
       runs-on: '[ "Linux", "docker", "build" ]'
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-out: integrate-sycl-linux-ICX
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-sycl-linux-icx -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -551,10 +523,9 @@ jobs:
       options: --device=/dev/dri:/dev/dri
       runs-on: '[ "Linux", "docker", "dg2" ]'
       env-from-files: ./.github/workflows/gfx-ubuntu24-public.env
-      dpcpp-version: intel/2025.0
+      dpcpp-version: intel/2025.2
       artifact-in: integrate-sycl-linux-ICX
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-sycl-linux-icx -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-icx
         cmake --build build --config Release --target test_integration
         
@@ -568,7 +539,6 @@ jobs:
       artifact-out: integrate-sycl-linux-DPCPP
       artifact-path: ./build/*.tar.gz
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-sycl-linux-dpcpp -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release --target build
 
@@ -583,7 +553,6 @@ jobs:
       env-from-files: ./.github/workflows/dpcpp-sycl-nightly.env ./.github/workflows/gfx-ubuntu24-public.env
       artifact-in: integrate-sycl-linux-DPCPP
       cmd: |
-        module load cmake/3.25.3
         cmake --preset integrate-sycl-linux-dpcpp -DCMAKE_BUILD_TYPE=Release -DEMBREE_TESTING_INTEGRATION_PRESET=test-linux-clang
         cmake --build build --config Release --target test_integration
         
