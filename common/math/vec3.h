@@ -297,6 +297,11 @@ namespace embree
   __forceinline Vec3<vfloat4>::Vec3(const Vec3fa& a) {
     const vfloat4 v = vfloat4(a.m128); x = shuffle<0,0,0,0>(v); y = shuffle<1,1,1,1>(v); z = shuffle<2,2,2,2>(v);
   }
+#else
+  template<>
+  __forceinline Vec3<vfloat4>::Vec3(const Vec3fa& a) {
+    x = a.x; y = a.y; z = a.z;
+  }
 #endif
 
 #if defined(__SSE__) || defined(__ARM_NEON)
@@ -338,11 +343,9 @@ namespace embree
   
 #else
 
-#if defined(__SSE__)
   template<> __forceinline Vec3<vfloat4>::Vec3(const Vec3fa& a) {
     x = a.x; y = a.y; z = a.z;
   }
-#endif
 #if defined(__AVX__)
   template<> __forceinline Vec3<vfloat8>::Vec3(const Vec3fa& a) {
     x = a.x; y = a.y; z = a.z;
