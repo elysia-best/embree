@@ -12,6 +12,8 @@ IF (EMBREE_ARM)
   SET(FLAGS_SSE42 "-D__SSE4_2__  -D__SSE4_1__")
   SET(FLAGS_AVX "-D__AVX__ -D__SSE4_2__  -D__SSE4_1__  -D__BMI__ -D__BMI2__ -D__LZCNT__")
   SET(FLAGS_AVX2 "-D__AVX2__ -D__AVX__ -D__SSE4_2__  -D__SSE4_1__  -D__BMI__ -D__BMI2__ -D__LZCNT__")
+ELSEIF (EMBREE_LOONGARCH64)
+  SET(FLAGS_SSE2 "-D__SSE__ -D__SSE2__")
 ELSE ()
   _SET_IF_EMPTY(FLAGS_SSE2  "-msse2")
   _SET_IF_EMPTY(FLAGS_SSE42 "-msse4.2")
@@ -31,6 +33,10 @@ IF (EMBREE_ARM)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsigned-char")             # treat 'char' as 'signed char'
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flax-vector-conversions")  # allow lax vector type conversions
 ENDIF (EMBREE_ARM)
+
+IF (EMBREE_LOONGARCH64)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msimd=lsx")                # enable LoongArch SIMD instructions SX
+ENDIF ()
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")                       # enables most warnings
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat -Wformat-security")  # enables string format vulnerability warnings

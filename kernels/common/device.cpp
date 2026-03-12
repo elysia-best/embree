@@ -78,6 +78,7 @@ namespace embree
     case CPU::XEON_PHI_KNIGHTS_MILL   : frequency_level = FREQUENCY_SIMD512; break;
     case CPU::XEON_PHI_KNIGHTS_LANDING: frequency_level = FREQUENCY_SIMD512; break;
     case CPU::ARM:             frequency_level = FREQUENCY_SIMD256; break;
+    case CPU::LoongArch:       frequency_level = FREQUENCY_SIMD128; break;
     }
 
     /* initialize global state */
@@ -106,6 +107,8 @@ namespace embree
     setCacheSize( State::tessellation_cache_size );
 
     /*! enable some floating point exceptions to catch bugs */
+    /*! Not supported on LoongArch64*/
+#ifndef __loongarch__ 
     if (State::float_exceptions)
     {
       int exceptions = _MM_MASK_MASK;
@@ -117,6 +120,7 @@ namespace embree
       //exceptions &= ~_MM_MASK_INEXACT;
       _MM_SET_EXCEPTION_MASK(exceptions);
     }
+#endif
     
     /* print info header */
     if (State::verbosity(1))

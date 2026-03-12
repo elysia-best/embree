@@ -100,6 +100,8 @@ namespace embree
     return (char*)name;
 #elif defined(__ARM_NEON)
     return "ARM";
+#elif defined(__loongarch__)
+    return "LoongArch";
 #else
     return "Unknown";
 #endif
@@ -176,6 +178,8 @@ namespace embree
     
 #elif defined(__ARM_NEON)
     return CPU::ARM;
+#elif defined(__loongarch__)
+    return CPU::LoongArch;
 #endif
     
     return CPU::UNKNOWN;
@@ -206,6 +210,7 @@ namespace embree
     case CPU::CORE1                   : return "Core";
     case CPU::ARM                     : return "ARM";
     case CPU::UNKNOWN                 : return "Unknown CPU";
+    case CPU::LoongArch               : return "LoongArch";
     }
     return "Unknown CPU (error)";
   }
@@ -344,18 +349,13 @@ namespace embree
     if (cpuid_leaf_7[EBX] & CPU_FEATURE_BIT_AVX512VL  ) cpu_features |= CPU_FEATURE_AVX512VL;
     if (cpuid_leaf_7[ECX] & CPU_FEATURE_BIT_AVX512VBMI) cpu_features |= CPU_FEATURE_AVX512VBMI;
 
-#if defined(__MACOSX__)
-    if (   (cpu_features & CPU_FEATURE_AVX512F)
-        || (cpu_features & CPU_FEATURE_AVX512DQ)
-        || (cpu_features & CPU_FEATURE_AVX512CD)
-        || (cpu_features & CPU_FEATURE_AVX512BW)
-        || (cpu_features & CPU_FEATURE_AVX512VL) )
-      {
-        // on macOS AVX512 will be enabled automatically by the kernel when the first AVX512 instruction is called
-        // see https://github.com/apple/darwin-xnu/blob/0a798f6738bc1db01281fc08ae024145e84df927/osfmk/i386/fpu.c#L176
-        // therefore we ignore the state of XCR0
-        cpu_features |= CPU_FEATURE_ZMM_ENABLED;
-      }
+    return cpu_features;
+
+#elif defined(__loongarch_lp64)
+
+    int cpu_features = CPU_FEATURE_SSE | CPU_FEATURE_SSE2 | CPU_FEATURE_XMM_ENABLED;
+#if defined(__loongarch_sx)
+    cpu_features |= CPU_FEATURE_LSX;
 #endif
     return cpu_features;
 
@@ -375,7 +375,6 @@ namespace embree
     cpu_features |= CPU_FEATURE_BMI2;
     cpu_features |= CPU_FEATURE_NEON_2X;
     return cpu_features;
-
 #else
     /* Unknown CPU. */
     return 0;
@@ -414,6 +413,7 @@ namespace embree
     if (features & CPU_FEATURE_AVX512VBMI) str += "AVX512VBMI ";
     if (features & CPU_FEATURE_NEON) str += "NEON ";
     if (features & CPU_FEATURE_NEON_2X) str += "2xNEON ";
+    if (features & CPU_FEATURE_LSX) str += "LSX ";
     return str;
   }
   
@@ -431,6 +431,7 @@ namespace embree
 
     if (isa == NEON) return "NEON";
     if (isa == NEON_2X) return "2xNEON";
+    if (isa == LSX) return "LSX";
     return "UNKNOWN";
   }
 
@@ -454,6 +455,7 @@ namespace embree
 
     if (hasISA(features,NEON)) v += "NEON ";
     if (hasISA(features,NEON_2X)) v += "2xNEON ";
+    if (hasISA(features,LSX)) v += "LSX ";
     return v;
   }
 }
