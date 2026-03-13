@@ -32,7 +32,7 @@
   #endif
 #endif
 
-#if defined(__aarch64__)
+#if defined(__aarch64__) || defined(__loongarch64)
   #if !defined(_lzcnt_u32)
     #define _lzcnt_u32 __builtin_clz
   #endif

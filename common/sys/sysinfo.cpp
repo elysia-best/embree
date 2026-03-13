@@ -357,6 +357,16 @@ namespace embree
 #if defined(__loongarch_sx)
     cpu_features |= CPU_FEATURE_LSX;
 #endif
+#if defined(__loongarch_asx)
+    /* LASX supports AVX2-width operations via SIMDe; report all AVX2 feature bits
+     * so that runtime ISA dispatch (SELECT_SYMBOL_AVX2) selects the AVX2 code path. */
+    cpu_features |= CPU_FEATURE_LASX;
+    cpu_features |= CPU_FEATURE_SSE3 | CPU_FEATURE_SSSE3 | CPU_FEATURE_SSE41 | CPU_FEATURE_SSE42;
+    cpu_features |= CPU_FEATURE_POPCNT | CPU_FEATURE_AVX | CPU_FEATURE_F16C;
+    cpu_features |= CPU_FEATURE_AVX2 | CPU_FEATURE_FMA3 | CPU_FEATURE_LZCNT;
+    cpu_features |= CPU_FEATURE_BMI1 | CPU_FEATURE_BMI2;
+    cpu_features |= CPU_FEATURE_YMM_ENABLED;
+#endif
     return cpu_features;
 
 #elif defined(__ARM_NEON) || defined(__EMSCRIPTEN__)
@@ -414,6 +424,7 @@ namespace embree
     if (features & CPU_FEATURE_NEON) str += "NEON ";
     if (features & CPU_FEATURE_NEON_2X) str += "2xNEON ";
     if (features & CPU_FEATURE_LSX) str += "LSX ";
+    if (features & CPU_FEATURE_LASX) str += "LASX ";
     return str;
   }
   
@@ -432,6 +443,7 @@ namespace embree
     if (isa == NEON) return "NEON";
     if (isa == NEON_2X) return "2xNEON";
     if (isa == LSX) return "LSX";
+    if (isa == LASX) return "LASX";
     return "UNKNOWN";
   }
 
@@ -456,6 +468,7 @@ namespace embree
     if (hasISA(features,NEON)) v += "NEON ";
     if (hasISA(features,NEON_2X)) v += "2xNEON ";
     if (hasISA(features,LSX)) v += "LSX ";
+    if (hasISA(features,LASX)) v += "LASX ";
     return v;
   }
 }
